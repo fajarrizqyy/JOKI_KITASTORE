@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemilihan Rank dan Pembayaran</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .rank-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .rank-card {
+            background-color: #2a2a3b;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, border-color 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .rank-card:hover {
+            transform: scale(1.05);
+            border-color: #4caf50;
+        }
+
+        .rank-card.selected {
+            border-color: #4caf50;
+        }
+
+        .rank-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .rank-image {
+            max-width: 80px;
+            margin: 10px auto;
+        }
+
+        .rank-price {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .rank-price .discounted {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        .discount {
+            display: inline-block;
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .instant-badge {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .payment-container {
+            margin-top: 30px;
+        }
+
+        #proceedToPayment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            background-color: #4caf50;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+        }
+
+        #proceedToPayment:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pilih Rank</h1>
+    <div class="rank-container" id="rankContainer">
+        <!-- ELITE -->
+        <div class="rank-card" onclick="selectRank('ELITE', 2000)">
+            <img src="Elite.webp" alt="ELITE" class="rank-image">
+            <div class="rank-title">ELITE</div>
+            <div class="rank-price">Rp 2.000</div>
+        </div>
+
+        <!-- MASTER -->
+        <div class="rank-card" onclick="selectRank('MASTER', 3000)">
+            <img src="Master.webp" alt="MASTER" class="rank-image">
+            <div class="rank-title">MASTER</div>
+            <div class="rank-price">Rp 3.000</div>
+        </div>
+
+        <!-- Existing Ranks -->
+        <div class="rank-card" onclick="selectRank('GRANDMASTER', 4000)">
+            <img src="Grandmaster.jfif" alt="GRANDMASTER" class="rank-image">
+            <div class="rank-title">GRANDMASTER</div>
+            <div class="rank-price">Rp 4.000</div>
+        </div>
+        <div class="rank-card" onclick="selectRank('EPIC', 5500)">
+            <img src="epic.jpg" alt="EPIC" class="rank-image">
+            <div class="rank-title">EPIC</div>
+            <div class="rank-price">Rp 5.500</div>
+        </div>
+        <div class="rank-card" onclick="selectRank('LEGEND', 6500)">
+            <img src="Legend.jfif" alt="LEGEND" class="rank-image">
+            <div class="rank-title">LEGEND</div>
+            <div class="rank-price">Rp 6.500</div>
+        </div>
+        <div class="rank-card" onclick="selectRank('MYTHIC', 8500)">
+            <img src="mitik.jfif" alt="MYTHIC" class="rank-image">
+            <div class="rank-title">MYTHIC</div>
+            <div class="rank-price">Rp 8.500</div>
+        </div>
+        <div class="rank-card" onclick="selectRank('MYTHIC HONOR', 12000)">
+            <img src="honor.jfif" alt="MYTHIC HONOR" class="rank-image">
+            <div class="rank-title">MYTHIC HONOR</div>
+            <div class="rank-price">Rp 12.000</div>
+        </div>
+    </div>
+
+    <h2 id="selectedRank">Rank Terpilih: -</h2>
+    <h2 id="totalPrice">Total Harga: Rp 0</h2>
+
+    <div class="payment-container">
+        <button id="proceedToPayment" onclick="proceedToPayment()">Lanjutkan Pembayaran</button>
+    </div>
+
+    <script>
+        let selectedRank = null;
+        let selectedPrice = 0;
+
+        // Fungsi untuk memilih rank
+        function selectRank(rank, price) {
+            document.querySelectorAll(".rank-card").forEach(card => {
+                card.classList.remove("selected");
+            });
+            const selectedCard = Array.from(document.querySelectorAll(".rank-card"))
+                .find(card => card.innerText.includes(rank));
+            selectedCard.classList.add("selected");
+
+            selectedRank = rank;
+            selectedPrice = price;
+
+            document.getElementById("selectedRank").innerText = `Rank Terpilih: ${rank}`;
+            document.getElementById("totalPrice").innerText = `Total Harga: Rp ${price.toLocaleString()}`;
+        }
+
+        // Fungsi untuk melanjutkan ke halaman pembayaran
+        function proceedToPayment() {
+            if (!selectedRank || selectedPrice === 0) {
+                alert("Silakan pilih rank terlebih dahulu.");
+                return;
+            }
+            window.location.href = `pembayaran.html?rank=${selectedRank}&price=${selectedPrice}`;
+        }
+    </script>
+</body>
+
+</html>

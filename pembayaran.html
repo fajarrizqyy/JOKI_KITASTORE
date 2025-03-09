@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pembayaran</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .payment-method {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #2a2a3b;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .payment-method:hover {
+      background-color: #38384f;
+    }
+
+    .payment-method.active {
+      border-color: #4caf50;
+    }
+
+    .payment-method img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    #totalPembayaran {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #4caf50;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    #warningMessage {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #e74c3c;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 text-white">
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-center mb-6">Rincian Pembayaran</h1>
+
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-xl font-bold mb-4">1. Isi Data Akun</h2>
+      <form id="dataDiriForm" class="space-y-4">
+        <div>
+          <label for="nickname" class="block text-sm font-medium">Nickname</label>
+          <input type="text" id="nickname" class="w-full p-2 rounded bg-gray-700 text-white">
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium">Email</label>
+          <input type="email" id="email" class="w-full p-2 rounded bg-gray-700 text-white">
+        </div>
+        <div>
+          <label for="heroRequest" class="block text-sm font-medium">Request Hero</label>
+          <input type="text" id="heroRequest" class="w-full p-2 rounded bg-gray-700 text-white">
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium">Password</label>
+          <div class="relative">
+            <input type="password" id="password" class="w-full p-2 rounded bg-gray-700 text-white">
+            <button type="button" id="togglePassword"
+              class="absolute right-2 top-2 bg-gray-600 text-white p-1 rounded">👁️</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-xl font-bold mb-4">2. Jumlah Pembelian (minimal 3)</h2>
+      <div class="flex items-center space-x-4">
+        <button id="decrease" class="bg-blue-600 p-2 rounded">-</button>
+        <input id="quantity" type="number" value="3" min="3" class="w-16 text-center p-2 rounded bg-gray-700">
+        <button id="increase" class="bg-blue-600 p-2 rounded">+</button>
+      </div>
+    </div>
+
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-xl font-bold mb-4">3. Metode Pembayaran</h2>
+      <div id="paymentMethods">
+        <div class="payment-method" onclick="selectPaymentMethod(this, 'Dana', 200)">
+          <img src="dana.jfif" alt="Dana">
+          <span>Dana</span>
+        </div>
+        <div class="payment-method" onclick="selectPaymentMethod(this, 'Gopay', 200)">
+          <img src="gopay.jfif" alt="Gopay">
+          <span>Gopay</span>
+        </div>
+        <div class="payment-method" onclick="selectPaymentMethod(this, 'Shopee Pay', 250)">
+          <img src="shope.webp" alt="Shopee Pay">
+          <span>Shopee Pay</span>
+        </div>
+      </div>
+      <p id="selectedPaymentMethod" class="mt-4 text-sm text-green-400">Metode Pembayaran: Belum dipilih</p>
+      <p id="adminFee" class="text-sm text-yellow-400">Biaya Admin: Rp 0</p>
+    </div>
+
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-xl font-bold mb-4">4. Rincian</h2>
+      <p id="rankTerpilih" class="text-sm">Rank: -</p>
+      <p id="hargaPerItem" class="text-sm">Harga per Item: Rp 0</p>
+      <h2 id="totalPembayaran" class="text-sm">Total: Rp 0</h2>
+    </div>
+
+    <div>
+      <button id="pesanSekarang" class="bg-green-600 w-full p-2 mt-4 rounded">Pesan Sekarang!</button>
+    </div>
+  </div>
+
+  <div id="overlay"></div>
+  <div id="warningMessage" onclick="closeWarning()">
+    <p id="warningText"></p>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const rank = urlParams.get("rank") || "Belum dipilih";
+    const price = parseInt(urlParams.get("price")) || 0;
+
+    const rankTerpilih = document.getElementById("rankTerpilih");
+    const hargaPerItem = document.getElementById("hargaPerItem");
+    const totalPembayaran = document.getElementById("totalPembayaran");
+    const quantityInput = document.getElementById("quantity");
+    const selectedPaymentMethod = document.getElementById("selectedPaymentMethod");
+    const adminFee = document.getElementById("adminFee");
+    const pesanSekarang = document.getElementById("pesanSekarang");
+    const warningMessage = document.getElementById("warningMessage");
+    const overlay = document.getElementById("overlay");
+
+
+    let quantity = 3;
+    let adminCost = 0;
+
+    function updateTotal() {
+      const total = price * quantity + adminCost;
+      totalPembayaran.textContent = `Total: Rp ${total.toLocaleString()}`;
+    }
+
+    rankTerpilih.textContent = `Rank: ${rank}`;
+    hargaPerItem.textContent = `Harga per Item: Rp ${price.toLocaleString()}`;
+    updateTotal();
+
+    document.getElementById("increase").addEventListener("click", () => {
+      quantity++;
+      quantityInput.value = quantity;
+      updateTotal();
+    });
+
+    document.getElementById("decrease").addEventListener("click", () => {
+      if (quantity > 3) {
+        quantity--;
+        quantityInput.value = quantity;
+        updateTotal();
+      }
+    });
+
+    quantityInput.addEventListener("input", (event) => {
+      const value = parseInt(event.target.value);
+      if (value >= 3) {
+        quantity = value;
+        updateTotal();
+      } else {
+        quantityInput.value = quantity;
+      }
+    });
+
+    function selectPaymentMethod(element, methodName, adminFeeAmount) {
+      document.querySelectorAll(".payment-method").forEach(method => {
+        method.classList.remove("active");
+      });
+      element.classList.add("active");
+      selectedPaymentMethod.textContent = `Metode Pembayaran: ${methodName}`;
+      adminFee.textContent = `Biaya Admin: Rp ${adminFeeAmount.toLocaleString()}`;
+      adminCost = adminFeeAmount;
+      updateTotal();
+    }
+
+    function isFormValid() {
+      const nickname = document.getElementById("nickname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const heroRequest = document.getElementById("heroRequest").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      return nickname && email && heroRequest && password;
+    }
+
+    function showWarning(message) {
+      overlay.style.display = "block";
+      warningMessage.style.display = "block";
+      document.getElementById("warningText").textContent = message;
+    }
+
+    function closeWarning() {
+      overlay.style.display = "none";
+      warningMessage.style.display = "none";
+    }
+
+    document.getElementById("pesanSekarang").addEventListener("click", async () => {
+      if (!isFormValid()) {
+        showWarning("Harap lengkapi semua data!");
+        return;
+      }
+
+      if (selectedPaymentMethod.textContent.includes("Belum dipilih")) {
+        showWarning("Harap pilih metode pembayaran!");
+        return;
+      }
+
+      const formData = {
+        nickname: document.getElementById("nickname").value,
+        email: document.getElementById("email").value,
+        heroRequest: document.getElementById("heroRequest").value,
+        rank: rank,
+        price: price,
+        quantity: quantity,
+        total: price * quantity + adminCost,
+        paymentMethod: selectedPaymentMethod.textContent.replace("Metode Pembayaran: ", ""),
+        adminFee: adminCost,
+      };
+
+      try {
+        const response = await fetch("/api/order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const textResponse = await response.text(); // Ubah dari JSON ke text dulu
+        if (response.ok) {
+          localStorage.setItem("formData", JSON.stringify(formData));
+          window.location.href = "pesan.html"; // Pindah tanpa notif
+        }
+        else {
+          showWarning("❌ Gagal menyimpan pesanan: " + result.message);
+        }
+      } catch (error) {
+        console.error("❌ Fetch error: Response bukan JSON!", textResponse);
+        showWarning("❌ Terjadi kesalahan saat mengirim pesanan.");
+      }
+    });
+
+
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.type === "password" ? "text" : "password";
+      passwordInput.type = type;
+      togglePassword.textContent = type === "password" ? "👁️" : "🙈";
+    });
+  </script>
+  
+</body>
+
+</html>

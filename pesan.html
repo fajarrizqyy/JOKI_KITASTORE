@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white">
+  <div class="container mx-auto p-6">
+    <!-- Gambar Metode Pembayaran -->
+    <div class="flex flex-col items-center mb-6">
+      <p class="text-lg font-semibold mb-2">Bayar ke QR ini</p> <!-- Tambahan teks -->
+      <div class="p-4 bg-gray-800 rounded-lg shadow-lg">
+        <img id="paymentImage" src="" alt="Metode Pembayaran" class="w-40 h-40 object-contain">
+        <a id="downloadLink" href="#" download class="block mt-4 bg-blue-600 text-center py-2 px-4 rounded">
+          Unduh Gambar
+        </a>
+      </div>
+    </div>
+
+    <h1 class="text-3xl font-bold text-center mb-6">Rincian Pesanan</h1>
+
+    <!-- Data Akun -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-xl font-bold mb-4">Data Akun</h2>
+      <p>Nickname: <span id="nickname"></span></p>
+      <p>Email: <span id="email"></span></p>
+      <p>Request Hero: <span id="heroRequest"></span></p>
+    </div>
+
+    <!-- Rincian Pembelian -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-xl font-bold mb-4">Rincian Pembelian</h2>
+      <p>Rank: <span id="rank"></span></p>
+      <p>Harga per Item: <span id="price"></span></p>
+      <p>Jumlah: <span id="quantity"></span></p>
+      <h2 class="text-xl font-bold">Total: <span id="total"></span></h2>
+      <p>Metode Pembayaran: <span id="paymentMethod"></span></p>
+      <p>Biaya Admin: <span id="adminFee"></span></p>
+
+      <!-- Detail ShopeePay -->
+      <div id="shopeePayDetails"></div>
+    </div>
+
+    <!-- Peringatan -->
+    <div class="bg-red-600 p-4 rounded-lg shadow-lg border border-red-800 mb-6">
+      <p>Harap menghubungi WhatsApp setelah melakukan transfer dan menyertakan screenshot bukti pembayaran.</p>
+    </div>
+
+    <!-- Tombol Aksi -->
+    <div class="mt-4">
+      <a href="https://wa.me/6285715456957" target="_blank"
+        class="bg-blue-600 w-full p-2 rounded block text-center">Hubungi WhatsApp</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const formData = JSON.parse(localStorage.getItem("formData"));
+
+      if (formData) {
+        document.getElementById("nickname").textContent = formData.nickname;
+        document.getElementById("email").textContent = formData.email;
+        document.getElementById("heroRequest").textContent = formData.heroRequest;
+        document.getElementById("rank").textContent = formData.rank;
+        document.getElementById("price").textContent = `Rp ${formData.price.toLocaleString()}`;
+        document.getElementById("quantity").textContent = formData.quantity;
+        document.getElementById("total").textContent = `Rp ${formData.total.toLocaleString()}`;
+        document.getElementById("paymentMethod").textContent = formData.paymentMethod;
+        document.getElementById("adminFee").textContent = `Rp ${formData.adminFee.toLocaleString()}`;
+
+        // Set image source and download link
+        const paymentImage = document.getElementById("paymentImage");
+        const downloadLink = document.getElementById("downloadLink");
+
+        let imageUrl = "";
+        switch (formData.paymentMethod.toLowerCase()) {
+          case "dana":
+            imageUrl = "qr dana.jpeg";
+            break;
+          case "gopay":
+            imageUrl = "qr gopay.jpg";
+            break;
+          case "shopee pay":
+            imageUrl = "qr shopee.jpeg";
+            document.getElementById("shopeePayDetails").classList.remove("hidden");
+            break;
+          default:
+            imageUrl = "default.jpg";
+        }
+
+        paymentImage.src = imageUrl;
+        downloadLink.href = imageUrl;
+      } else {
+        alert("Data tidak ditemukan. Silakan kembali ke halaman sebelumnya.");
+        window.location.href = "pembayaran.html";
+      }
+    });
+  </script>
+</body>
+
+</html>

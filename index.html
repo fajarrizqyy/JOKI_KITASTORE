@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKI KITA STORE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            background: url('joki.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+        header {
+            background-color: rgba(22, 19, 19, 0.95);
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            width: 100%;
+        }
+        nav {
+            background-color: rgba(22, 19, 19, 0.95);
+            padding: 10px;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            padding: 10px;
+        }
+        nav a:hover {
+            color: #ff9800;
+        }
+        main {
+            width: 100%;
+        }
+        .info-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .section-box {
+            background-color: rgba(22, 19, 19, 0.95);
+            width: 100%;
+            padding: 40px 10%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .btn-order {
+            display: inline-block;
+            background-color: #ff9800;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .btn-order:hover {
+            background-color: #e68900;
+        }
+        .contact-info a {
+            color: #ff9800;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .contact-info p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .copyright {
+            background-color: rgba(22, 19, 19, 0.95);
+            padding: 15px;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 30px;
+        }
+        @media (max-width: 768px) {
+            .section-box {
+                padding: 30px 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        JOKI KITA STORE
+    </header>
+    <nav>
+        <a href="about.html">Informasi</a>
+        <a href="#layanan">Layanan</a>
+        <a href="kontak.html">Kontak</a>
+    </nav>
+    <main>
+        <div class="info-container">
+            <section id="layanan" class="section-box">
+                <h2>Layanan</h2>
+                <p>Ingin naik peringkat dengan cepat dan aman? Layanan joki kami hadir
+                   untuk membantu Anda mencapai level tertinggi dalam game favorit Anda.
+                   Dengan kecepatan, keamanan, dan harga terbaik, kami siap melayani Anda 24/7!</p>
+            </section>
+            <section class="section-box">
+                <h2>Joki Game PC</h2>
+                <p>Tingkatkan peringkat Anda dengan jasa joki profesional dari tim kami.</p>
+                <a href="joki.html" class="btn-order">Pesan Sekarang</a>
+            </section>
+            <section id="kontak" class="section-box contact-info">
+                <h2>Kontak</h2>
+                <p>Email: <a href="mailto:jokikitastore62@gmail.com">jokikitastore62@gmail.com</a></p>
+                <p>WhatsApp: <a href="https://wa.me/6285715456957">+62 857-1545-6957</a></p>
+                <p>Instagram: <a href="https://www.instagram.com/joki_kitastore" target="_blank">@joki_kitastore</a></p>
+            </section>
+        </div>
+    </main>
+    <div class="copyright">
+        &copy; 2025 KITA STORE. Semua Hak Dilindungi.
+    </div>
+</body>
+</html>

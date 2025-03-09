@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konfirmasi Transaksi - Jasa Joki Mobile Legends</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+  <div class="container mx-auto p-6">
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-bold">Transaksi Selesai</h1>
+      <p class="text-sm">Pembayaran Anda telah berhasil diproses. Terima kasih telah menggunakan layanan kami!</p>
+    </div>
+
+    <!-- Rincian Pembayaran -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-xl font-bold mb-4">Rincian Pembayaran Anda</h2>
+      <div class="text-sm">
+        <p id="selectedPaymentMethod">Metode Pembayaran: <span class="font-bold">QRIS</span></p>
+        <p id="hargaPerItem">Harga per Item: <span class="font-bold">Rp 6.000</span></p>
+        <p id="jumlahPembelian">Jumlah Pembelian: <span class="font-bold">3</span></p>
+        <p id="biayaAdmin">Biaya Admin: <span class="font-bold">Rp 200</span></p>
+        <hr class="my-2 border-gray-700">
+        <p id="totalPembayaran" class="font-bold">Total Pembayaran: <span class="font-bold">Rp 18.200</span></p>
+        <p class="mt-4 text-sm text-green-400">Pembayaran Anda telah diterima. Transaksi berhasil!</p>
+      </div>
+    </div>
+
+    <!-- Tombol untuk kembali ke halaman utama -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h2 class="text-xl font-bold mb-4">Kembali ke Halaman Utama</h2>
+      <p class="text-sm mb-4">Klik tombol di bawah ini untuk kembali ke halaman utama setelah transaksi selesai.</p>
+      <a href="index.html">
+        <button class="bg-green-600 w-full p-2 rounded">Kembali ke Halaman Utama</button>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Mengambil data pembayaran dari localStorage
+    const selectedPaymentMethod = localStorage.getItem("selectedPaymentMethod") || "QRIS";
+    const totalPembayaran = localStorage.getItem("totalPembayaran") || "Rp 18.200";
+    const hargaPerItem = localStorage.getItem("hargaPerItem") || "Rp 6.000";
+    const jumlahPembelian = localStorage.getItem("jumlahPembelian") || "3";
+    const biayaAdmin = localStorage.getItem("biayaAdmin") || "Rp 200";
+
+    // Update rincian pembayaran dengan data yang diambil
+    document.getElementById("selectedPaymentMethod").innerHTML = `Metode Pembayaran: <span class="font-bold">${selectedPaymentMethod}</span>`;
+    document.getElementById("hargaPerItem").innerHTML = `Harga per Item: <span class="font-bold">${hargaPerItem}</span>`;
+    document.getElementById("jumlahPembelian").innerHTML = `Jumlah Pembelian: <span class="font-bold">${jumlahPembelian}</span>`;
+    document.getElementById("biayaAdmin").innerHTML = `Biaya Admin: <span class="font-bold">${biayaAdmin}</span>`;
+    document.getElementById("totalPembayaran").innerHTML = `Total Pembayaran: <span class="font-bold">${totalPembayaran}</span>`;
+  </script>
+</body>
+</html>

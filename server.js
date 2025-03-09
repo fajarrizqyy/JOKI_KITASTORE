@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config(); // Load variabel lingkungan dari .env
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -6,6 +6,7 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -25,9 +26,9 @@ const UserSchema = new mongoose.Schema({
 });
 const User = mongoose.model("User", UserSchema);
 
-// Endpoint utama
+// Endpoint utama (Cek apakah backend berjalan)
 app.get("/", (req, res) => {
-  res.send("Backend berjalan 24/7 🚀");
+  res.send("Backend JOKI KITASTORE Berjalan 24/7 🚀");
 });
 
 // Endpoint tambah data ke MongoDB

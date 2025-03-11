@@ -3,7 +3,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('joki.jpg'); /* Sesuaikan path */
+    background: url('/images/joki.jpg') no-repeat center center fixed;
+
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

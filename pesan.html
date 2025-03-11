@@ -79,13 +79,14 @@
         let imageUrl = "";
         switch (formData.paymentMethod.toLowerCase()) {
           case "dana":
-            imageUrl = "qr dana.jpeg";
+            imageUrl = "/images/qr dana.jpeg";
             break;
           case "gopay":
-            imageUrl = "qr gopay.jpg";
+            imageUrl = "/images/qr gopay.jpg";
+
             break;
           case "shopee pay":
-            imageUrl = "qr shopee.jpeg";
+            imageUrl = "/images/qr shopee.jpeg";
             document.getElementById("shopeePayDetails").classList.remove("hidden");
             break;
           default:
